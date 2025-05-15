@@ -464,9 +464,12 @@ def chat():
                     break
                  
         history_block = "\n\n".join(qa_pairs)
-        if(history[1]) history_block+=history[1]
-        if(history[2]) history_block+=history[2]
-        if(history[3]) history_block+=history[3]
+        if(history[1]):
+            history_block+=history[1]
+        if(history[2]):
+            history_block+=history[2]
+        if(history[3]):
+            history_block+=history[3]
 
         prompt = (
             f'You are an AI interviewer assessing the aspect: "{current_aspect}".\n\n'
