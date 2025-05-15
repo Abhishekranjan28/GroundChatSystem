@@ -254,7 +254,17 @@ def chat():
             session_id = request.form.get("session_id")
             user_response = request.form.get("user_response")
             file = request.files.get("file")
-
+            report=request.form.get("report","")
+            category=request.form.get("category","")
+            sub_categories_str = request.form.get("sub_categories", "[]")
+            
+            try:
+               sub_categories = json.loads(sub_categories_str)
+               if not isinstance(sub_categories, list):
+                   sub_categories = []
+            except json.JSONDecodeError:
+               sub_categories = []
+               
             if file:
                 with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(file.filename)[-1]) as temp_file:
                     file.save(temp_file.name)
@@ -322,6 +332,19 @@ def chat():
         print("report:",report)
         print("category",category)
         print("sub_categories",sub_categories)
+
+        if report:
+                history.append(f"[Initial Report]\n{report}")
+        if category:
+                history.append(f"[Category Chosen]\n{category}")
+        if sub_categories:
+                history.append(f"[Sub-categories]\n{', '.join(sub_categories)}")
+
+        for subcat in sub_categories:
+            conn=get_db_connection1()
+            subcat_contents = query_data(conn, category, subcat)
+            for content in subcat_contents:
+                history.append(f"[Subcategory Content: {subcat}]\n{content}")
         
         history, answers, completed, attempts = get_session(session_id)
         if attempts is None:
@@ -330,20 +353,7 @@ def chat():
         current_aspect_index = attempts.get("current_aspect_index", 0)
         current_question_index = attempts.get("current_question_index", 0)
 
-        if not history:
-            if report:
-                history.append(f"[Initial Report]\n{report}")
-            if category:
-                history.append(f"[Category Chosen]\n{category}")
-            if sub_categories:
-                history.append(f"[Sub-categories]\n{', '.join(sub_categories)}")
-
-                for subcat in sub_categories:
-                    conn=get_db_connection1()
-                    subcat_contents = query_data(conn, category, subcat)
-                    for content in subcat_contents:
-                        history.append(f"[Subcategory Content: {subcat}]\n{content}")
-                        
+        if not history:            
             initial_question = f'Aspect: "{aspects[0]}"\n\nPlease provide the information regarding "{aspects[0]}"'
             history.append(initial_question)
             save_session(session_id, history, answers, completed, attempts)
