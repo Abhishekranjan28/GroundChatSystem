@@ -342,14 +342,13 @@ def chat():
             history.append(f"[Category Chosen]\n{category}")
 
         if sub_categories:
-            subcat_content = ""
-            for subcat in sub_categories:
-                conn = get_db_connection1()
-                subcat_contents = query_data(conn, category, subcat)
-                for content in subcat_contents:
-                    subcat_content += content
-    
-            history.append(f"[Subcategory Content: {subcat_content}]\n")
+           conn = get_db_connection1()
+           subcat_content = ""
+           for subcat in sub_categories:
+              subcat_contents = query_data(conn, category, subcat)
+              for content in subcat_contents:
+                  subcat_content += content[0]  
+           history.append(f"[Subcategory Content: {subcat_content}]\n")
 
                 
         if attempts is None:
