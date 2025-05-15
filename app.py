@@ -495,3 +495,7 @@ def chat():
                 os.unlink(temp_file_path)
             except Exception as e:
                 print(f"Warning: Failed to delete temp file: {e}")
+
+if __name__ == '__main__':
+    init_db()
+    app.run(debug=True)
