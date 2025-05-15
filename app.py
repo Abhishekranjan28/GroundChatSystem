@@ -50,7 +50,7 @@ def get_db_connection1():
 def init_db():
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('''
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS user_sessions (
             session_id TEXT PRIMARY KEY,
             history TEXT,
@@ -58,9 +58,10 @@ def init_db():
             completed BOOLEAN,
             attempts TEXT
         )
-    ''')
+    """)
     conn.commit()
     conn.close()
+
 
 init_db()
 
@@ -121,16 +122,13 @@ def query_data(conn, table, subcategory):
         if results:
             return results
         else:
-            return jsonify({
-                "error":f"Error while getting data{e}"
-            })
+            return []
     except Exception as e:
          return jsonify({
              "error":f"Error while getting data{e}"
          })
     finally:
         cursor.close()
-
 
 def get_mime_type(file_path):
     mime_type, _ = mimetypes.guess_type(file_path)
@@ -335,10 +333,10 @@ def chat():
 
                 for subcat in sub_categories:
                     conn=get_db_connection1()
-                    contents = query_data(conn, category, subcat)
-                    for content in contents:
+                    subcat_contents = query_data(conn, category, subcat)
+                    for content in subcat_contents:
                         history.append(f"[Subcategory Content: {subcat}]\n{content}")
-
+                        
             initial_question = f'Aspect: "{aspects[0]}"\n\nPlease provide the first document or information regarding "{aspects[0]}"'
             history.append(initial_question)
             save_session(session_id, history, answers, completed, attempts)
