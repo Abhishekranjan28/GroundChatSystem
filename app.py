@@ -231,6 +231,9 @@ def chat():
     session_id = None
     user_response = None
     temp_file_path = None
+    report=""
+    category=""
+    sub_categories=[]
 
     aspects = [
         "Supplier and traceability documentation",
