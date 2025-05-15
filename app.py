@@ -315,6 +315,10 @@ def chat():
             report = data.get("report","")
             category = data.get("category","")
             sub_categories = data.get("sub_categories", [])
+
+        print("report:",report)
+        print("category",category)
+        print("sub_categories",sub_categories)
         
         history, answers, completed, attempts = get_session(session_id)
         if attempts is None:
@@ -337,7 +341,7 @@ def chat():
                     for content in subcat_contents:
                         history.append(f"[Subcategory Content: {subcat}]\n{content}")
                         
-            initial_question = f'Aspect: "{aspects[0]}"\n\nPlease provide the first document or information regarding "{aspects[0]}"'
+            initial_question = f'Aspect: "{aspects[0]}"\n\nPlease provide the information regarding "{aspects[0]}"'
             history.append(initial_question)
             save_session(session_id, history, answers, completed, attempts)
             return jsonify({
