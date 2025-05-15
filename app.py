@@ -349,7 +349,6 @@ def chat():
               for content in subcat_contents:
                   subcat_content += content[0]  
            history.append(f"[Subcategory Content: {subcat_content}]\n")
-
                 
         if attempts is None:
             attempts = {}
@@ -366,8 +365,7 @@ def chat():
                 "completed": False,
                 "question_number": 1
             })
-
-
+        
         if user_response or contents:
             last_question = history[-1]
             question_number = len(answers) + 1
@@ -476,6 +474,8 @@ def chat():
             f'{history_block if history_block else "No previous questions yet."}\n\n'
             f'Generate the next relevant and detailed question for this aspect (question {current_question_index + 1} of 5).'
         )
+
+        print("prompt:",prompt)
 
         contents.insert(0, {"text": prompt})
         model_response = model.generate_content(contents)
