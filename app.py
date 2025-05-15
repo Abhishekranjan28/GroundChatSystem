@@ -333,20 +333,25 @@ def chat():
         print("category",category)
         print("sub_categories",sub_categories)
 
-        if report:
-                history.append(f"[Initial Report]\n{report}")
-        if category:
-                history.append(f"[Category Chosen]\n{category}")
-        if sub_categories:
-                history.append(f"[Sub-categories]\n{', '.join(sub_categories)}")
-
-        for subcat in sub_categories:
-            conn=get_db_connection1()
-            subcat_contents = query_data(conn, category, subcat)
-            for content in subcat_contents:
-                history.append(f"[Subcategory Content: {subcat}]\n{content}")
-        
         history, answers, completed, attempts = get_session(session_id)
+        
+        if report:
+            history.append(f"[Initial Report]\n{report}")
+
+        if category:
+            history.append(f"[Category Chosen]\n{category}")
+
+        if sub_categories:
+            subcat_content = ""
+            for subcat in sub_categories:
+                conn = get_db_connection1()
+                subcat_contents = query_data(conn, category, subcat)
+                for content in subcat_contents:
+                    subcat_content += content
+    
+            history.append(f"[Subcategory Content: {subcat_content}]\n")
+
+                
         if attempts is None:
             attempts = {}
 
@@ -462,8 +467,9 @@ def chat():
                     break
                  
         history_block = "\n\n".join(qa_pairs)
-        history_block+=history[0]
         history_block+=history[1]
+        history_block+=history[2]
+        history_block+=history[3]
 
         prompt = (
             f'You are an AI interviewer assessing the aspect: "{current_aspect}".\n\n'
