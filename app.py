@@ -32,13 +32,7 @@ model = genai.GenerativeModel("gemini-2.0-flash")
 API_KEY = os.getenv("OCR_SPACE_API_KEY")
 API_URL = "https://api.ocr.space/parse/image"
 
-'''headers = {
-    "Authorization": f"Bearer {HF_API_KEY}"
-}'''
-
-'''DB_URL = "postgresql://ChatDB_owner:npg_iHUW8aJvtyR6@ep-red-haze-a4l9n17v-pooler.us-east-1.aws.neon.tech/ChatDB?sslmode=require"'''
 DB_URL=os.getenv("DB_URL")
-
 NEON_DB_URL=os.getenv("NEON_DB_URL")
 
 def get_db_connection():
