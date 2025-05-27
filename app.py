@@ -276,9 +276,19 @@ def chat():
     product_name=""
 
     aspects = [
-        "Supplier and traceability documentation"
+        "Supplier and traceability documentation",
+        "GMOs and contamination risk analysis",
+        "In-depth farming or livestock management practices",
+        "Soil, pest, biodiversity, animal welfare checks",
+        "Harvesting practices and post-harvest handling",
+        "Review of manufacturing practices",
+        "Cross-contamination prevention methods",
+        "Review of all additives and processing aids",
+        "Full packaging and label compliance",
+        "Worker welfare review",
+        "Environmental impact and sustainability assessment"
     ]
-
+    
     try:
         if request.content_type.startswith('multipart/form-data'):
             session_id = request.form.get("session_id")
