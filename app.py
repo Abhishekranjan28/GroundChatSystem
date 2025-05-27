@@ -129,7 +129,7 @@ def query_data(conn, table, subcategory):
         cursor.close()
 
 def insert_product(product_name, content):
-    conn = get_db_connection()
+    conn = get_db_connection2()
     if conn is None:
         return "Database connection error."
 
@@ -148,6 +148,24 @@ def insert_product(product_name, content):
         conn.close()
 
         return "Product content updated successfully."
+    except Exception as e:
+        return f"Error: {e}"
+
+def get_product_content(product_name):
+    conn = get_db_connection2()
+    if conn is None:
+        return "Database connection error."
+
+    try:
+        cursor = conn.cursor()
+        query = "SELECT content FROM product_info WHERE product_name = %s"
+        cursor.execute(query, (product_name,))
+        result = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        return result[0] if result else "Product not found."
     except Exception as e:
         return f"Error: {e}"
 
@@ -470,6 +488,9 @@ def chat():
             report = response.text.strip()
 
             insert_product(product_name,report)
+
+            content_from_db=get_product_content(product_name)
+            print("Content Saved to DB for final report::::->>>>",content_from_db)
 
             save_session(session_id, history, answers, completed, attempts)
             return jsonify({
